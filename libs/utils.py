@@ -1,4 +1,6 @@
 import os
+import random
+from functools import wraps
 from hashlib import md5, sha256
 
 from flask import session
@@ -56,6 +58,7 @@ def save_avatar(avatar_file):
 
 
 def login_required(view_func):
+    @wraps(view_func)
     def check_session(*args, **kwargs):
         uid = session.get('uid')
         if not uid:
@@ -63,4 +66,9 @@ def login_required(view_func):
         else:
             return view_func(*args, **kwargs)
     return check_session
+
+
+def random_zh_str(length):
+    words = [chr(random.randint(20000,30000)) for i in range(length)]
+    return ''.join(words)
 

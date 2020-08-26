@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+   <div class="alert alert-primary" role="alert">
+   <h4 class="alert-heading">{{ article.author.username }}</h4>
+       <hr>
+   <p class="mb-0">
+       {{ article.content | replace('\n', '<br>') | safe }}
+   </p>
+       <hr>
+
+   <div class="row col-12">
+       {% if article.uid == session.get('uid') %}
+           <a class="text-info" href="/article/edit?aid={{ article.id }}">修改微博</a>
+           &nbsp;&nbsp;&nbsp;
+           <a class="text-danger" href="/article/delete?aid={{ article.id }}">删除微博</a>
+           &nbsp;&nbsp;&nbsp;
+       {% endif %}
+       <span class="text-secondary">{{ article.created }}</span>
+   </div>
+   </div>
+{% endblock %}

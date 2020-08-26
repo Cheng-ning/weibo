@@ -18,12 +18,12 @@ user_bp.template_folder = './templates'
 @user_bp.route('/register', methods=('POST', 'GET'))
 def register():
     if request.method == 'POST':
-        username = request.form.get('username','').strip()
-        password1 = request.form.get('password1','').strip()
+        username = request.form.get('username', '').strip()
+        password1 = request.form.get('password1', '').strip()
         password2 = request.form.get('password2', '').strip()
         gender = request.form.get('gender', '').strip()
         birthday = request.form.get('birthday', '').strip()
-        city = request.form.get('city','').strip()
+        city = request.form.get('city', '').strip()
         bio = request.form.get('bio', '').strip()
         now = datetime.datetime.now()
 
@@ -48,12 +48,11 @@ def register():
         return render_template('register.html')
 
 
-
 @user_bp.route('/login', methods=('POST', 'GET'))
 def login():
     if request.method == 'POST':
-        username = request.form.get('username','').strip()
-        password = request.form.get('password','').strip()
+        username = request.form.get('username', '').strip()
+        password = request.form.get('password', '').strip()
 
         #  获取用户
         try:
@@ -61,7 +60,7 @@ def login():
         except NoResultFound:
             return render_template('login.html', err='该用户不存在')
 
-        #检查密码
+        # 检查密码
         if check_password(password, user.password):
             session['uid'] = user.id
             session['username'] = user.username
@@ -81,6 +80,6 @@ def logout():
 @user_bp.route('/info')
 @login_required
 def info():
-     uid = session['uid']
-     user = User.query.get(uid)
-     return render_template('info.html', user=user)
+    uid = session['uid']
+    user = User.query.get(uid)
+    return render_template('info.html', user=user)

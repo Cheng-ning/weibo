@@ -7,7 +7,10 @@
 <hr />
 
 <figure class="figure">
-  <img src="{{ user.avatar }}" class="figure-img img-fluid rounded" width="200px" />
+    <img src="{{ user.avatar }}" class="figure-img img-fluid rounded" width="200px" />
+{#    <a class="btn btn-outline-success" href="/article/post">发表微博</a>#}
+{#    <a class="btn btn-outline-success" href="/article/read">修改微博</a>#}
+{#    <a class="btn btn-outline-success" href="/article/delete">删除微博</a>#}
 </figure>
 
 <ul class="list-group">
@@ -23,5 +26,6 @@
   <li class="list-group-item"><strong>城市</strong>：{{ user.city }}</li>
   <li class="list-group-item"><strong>简介</strong>：{{ user.bio }}</li>
   <li class="list-group-item"><strong>注册时间</strong>：{{ user.created }}</li>
+
 </ul>
 {% endblock %}

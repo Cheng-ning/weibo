@@ -40,8 +40,9 @@
 
         <div>
           {% if 'uid' in session %}
-          <a class="btn btn-outline-primary" href="/user/info">{{ session.username }}</a>
-          <a class="btn btn-outline-success" href="/user/logout">退出</a>
+              <a class="btn btn-outline-success" href="/article/post">发布微博</a>
+              <a class="btn btn-outline-primary" href="/user/info">{{ session.username }}</a>
+              <a class="btn btn-outline-warning" href="/user/logout">退出</a>
           {% else %}
           <a class="btn btn-outline-primary" href="/user/register">注册</a>
           <a class="btn btn-outline-success" href="/user/login">登录</a>
@@ -63,7 +64,7 @@
 
     <!-- 底栏 -->
     <div class="container footbar">
-      <div class="text-center text-secondary">Copyright @ Seamile</div>
+      <div class="text-center text-secondary">Copyright @ Chengning</div>
     </div>
 
     <script src="/static/js/jquery-3.5.1.slim.min.js"></script>
