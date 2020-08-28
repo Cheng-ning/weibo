@@ -1,6 +1,6 @@
 import datetime
 
-from flask import Blueprint, redirect
+from flask import Blueprint, redirect, abort
 from flask import request
 from flask import render_template
 from flask import session
@@ -9,7 +9,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 from libs.orm import db
 from libs.utils import check_password, login_required, make_password, save_avatar
-from user.models import User
+from user.models import User, Follow
 
 user_bp = Blueprint('user', __name__, url_prefix='/user')
 user_bp.template_folder = './templates'
@@ -83,3 +83,60 @@ def info():
     uid = session['uid']
     user = User.query.get(uid)
     return render_template('info.html', user=user)
+
+
+@user_bp.route('/other')
+def other():
+    """查看用户信息"""
+    other_uid = int(request.args.get('uid'))
+    if other_uid == session.get('uid'):
+        return redirect('/user/info')
+
+    user = User.query.get(other_uid)  # 其他人
+
+    self_uid = session.get('uid')  # 取出自己的id
+    if self_uid:
+        if Follow.query.filter_by(uid=self_uid, fid=other_uid).count():
+            is_followed = True
+        else:
+            is_followed = False
+    else:
+        is_followed = False
+    return render_template('other.html', user=user, is_followed=is_followed)
+
+
+@user_bp.route('/follow')
+@login_required
+def follow():
+    fid = int(request.args.get('fid'))
+    uid = session['uid']
+
+    # 不允许用户自己关注自己
+    if uid == fid:
+        abort(403)
+
+    fw = Follow(uid=uid, fid=fid)
+    try:
+        User.query.filter_by(id=uid).update({'n_follow':User.n_follow + 1})
+        User.query.filter_by(id=fid).update({'n_fans':User.n_fans + 1})
+        db.session.add(fw)
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+        User.query.filter_by(id=uid).update({'n_follow': User.n_follow - 1})
+        User.query.filter_by(id=fid).update({'n_fans': User.n_fans - 1})
+        Follow.query.filter_by(uid=uid, fid=fid).delete()
+        db.session.commit()
+
+    return redirect(f'/user/other?uid={fid}')
+
+
+
+@user_bp.route('/fans')
+def show_fans():
+    uid = session['uid']
+    fans = Follow.query.filter_by(fid=uid).values('uid')
+    fans_uid_list = [uid for (uid,) in fans]
+
+    users = User.query.filter(User.id.in_(fans_uid_list))
+    return render_template('fans.html', users=users)

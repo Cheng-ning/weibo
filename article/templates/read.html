@@ -17,6 +17,54 @@
            &nbsp;&nbsp;&nbsp;
        {% endif %}
        <span class="text-secondary">{{ article.created }}</span>
+       &nbsp;&nbsp;&nbsp;
+       <span>{{ article.n_thumb }}</span>
+       <a class="primary" href="/article/set_thumb?aid={{ article.id }}">
+           {% if is_liked %}
+           取消点赞
+           {% else %}
+           点赞
+           {% endif %}
+       </a>
+
    </div>
    </div>
+    <!-- 评论区-->
+    <form action="/article/post_comment" method="post">
+        <div class="input-group mb-3">
+              <input type="text" name="content" class="form-control" placeholder="请发表评论...... ">
+
+              <input type="hidden" name="aid" value="{{ article.id }}">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary">发表</button>
+              </div>
+        </div>
+    </form>
+
+    <!-- 评论展示区 -->
+    {% for comment in comments %}
+        <div class="alert alert-secondary" role="alert">
+            {% if comment.cid == 0 %}
+                {{ comment.author.username }} 说:
+            {% else %}
+                {{ comment.author.username }} 对 {{ comment.upper.author.username }} 说:
+            {% endif %}
+            <hr>
+
+            <form action="/article/reply" method="post">
+                <input type="text" name="content">
+                <input type="hidden" name="aid" value="{{ article.id }}">
+                <input type="hidden" name="cid" value="{{ comment.id }}">
+                <button>回复</button>
+            </form>
+            {{ comment.content }}
+            <br>
+            {{ comment.created }}
+            <a href="/article/delete_comment?cid={{ comment.id }}">删除</a>
+        </div>
+        <hr>
+    {% endfor %}
+
+    <br>
+
 {% endblock %}

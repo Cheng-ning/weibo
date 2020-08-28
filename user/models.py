@@ -18,9 +18,12 @@ class User(db.Model):
     bio = db.Column(db.Text, default='')
     created = db.Column(db.DateTime, nullable=False)
 
+    n_follow = db.Column(db.Integer, nullable=False, default=0)
+    n_fans = db.Column(db.Integer, nullable=False, default=0)
+
     @classmethod
     def fake_users(cls, num):
-        users =[]
+        users = []
         for i in range(num):
             year = random.randint(2010, 2019)
             month = random.randint(1, 12)
@@ -29,9 +32,17 @@ class User(db.Model):
             username = random_zh_str(3)
             password = '123546453'
             gender = random.choice(['male', 'female', 'unknow'])
-            birthday ='%04d-%02d-%02d' % (year, month, day)
-            city = random.choice(['上海','苏州','长沙','哈尔滨','长春','北京'])
+            birthday = '%04d-%02d-%02d' % (year, month, day)
+            city = random.choice(['上海', '苏州', '长沙', '哈尔滨', '长春', '北京'])
             bio = random_zh_str(30)
             created = '2010-02-28'
             user = cls(username=username, password=password, gender=gender,
                        birthday=birthday, city=city, bio=bio, created=created)
+
+
+class Follow(db.Model):
+    """关注表"""
+    __tablename__ = 'follow'
+
+    uid = db.Column(db.Integer, primary_key=True)
+    fid = db.Column(db.Integer, primary_key=True)

@@ -10,7 +10,7 @@ from user.views import user_bp
 
 app = Flask(__name__)
 app.secret_key = r'zxicojnv90u3nlcnxvp39-vl39(*l31j'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root@localhost:3306/weibo'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://cn:123456@106.53.229.53:3306/weibo'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 manager = Manager(app)

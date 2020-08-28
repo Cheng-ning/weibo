@@ -3,11 +3,13 @@
 {% block content %}
     {% for art in art_list %}
         <div class="alert alert-info" role="alert">
-            <strong>{{ art.author.username }}</strong>说：
+            <a href="/user/other?uid={{ art.uid }}"><strong>{{ art.author.username }}</strong></a>说：
             <br>
             {{ art.content | replace('\n', '<br />') | safe }}
             <br>
             <a class="text-secondary" href="/article/read?aid={{ art.id }}">{{ art.updated }}</a>
+            &emsp;
+            <span class="text-danger">{{ art.n_thumb }} 赞</span>
         </div>
         <hr>
     {% endfor %}
@@ -17,7 +19,7 @@
             {% for pg in pages %}
                 {% if pg == page %}
                     <li class="page-item"><a class="page-link text-secondary">{{ pg }}</a></li>
-                    {% else %}
+                {% else %}
                     <li class="page-item"><a class="page-link" href="/article/index?page={{ pg }}">{{ pg }}</a></li>
                 {% endif %}
             {% endfor %}
@@ -25,3 +27,4 @@
     </nav>
 
 {% endblock %}
+
